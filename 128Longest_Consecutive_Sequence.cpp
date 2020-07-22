@@ -55,3 +55,29 @@ public:
         }
     }
 };
+
+/*  Intelligent sequence building
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        unordered_set<int> num_set;
+        for(auto n: nums){
+            num_set.insert(n);
+        }
+        
+        int ans = 0;
+        for(auto n: num_set){
+            if(num_set.find(n-1) != num_set.end()) {
+                continue;
+            }
+            int count = 1;
+            while(num_set.find(n+1) != num_set.end()){
+                count++;
+                n++;
+            }
+            ans = max(count, ans);
+        }
+        return ans;
+    }
+};
+*/
