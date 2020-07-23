@@ -46,3 +46,59 @@ public:
  * int param_1 = obj->next();
  * bool param_2 = obj->hasNext();
  */
+ 
+ #if 0
+ /**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class BSTIterator {
+public:
+    BSTIterator(TreeNode* root) {
+        if(!root) {return; }
+        {
+            data.push(root);
+            while(root->left){
+                data.push(root->left);
+                root = root->left;
+            }
+        }
+    }
+    
+    /** @return the next smallest number */
+    int next() {
+        auto n = data.top();
+        data.pop();
+        if(n->right) {
+            auto root = n->right;
+            data.push(root);
+            while(root->left){
+                data.push(root->left);
+                root = root->left;
+            }
+        }
+        return n->val;
+    }
+    
+    /** @return whether we have a next smallest number */
+    bool hasNext() {
+        return !data.empty();
+    }
+    
+    stack<TreeNode*> data;
+};
+
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator* obj = new BSTIterator(root);
+ * int param_1 = obj->next();
+ * bool param_2 = obj->hasNext();
+ */
+ #endif
