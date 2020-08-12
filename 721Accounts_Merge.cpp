@@ -75,3 +75,61 @@ public:
         }
     }
 };
+
+// BFS solution
+#if 0
+class Solution {
+public:
+    vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
+        unordered_map<string, vector<int>> relation;
+        // build relations
+        for(int i =0;i<accounts.size();i++){
+            for(int j=1;j<accounts[i].size(); j++){
+                relation[accounts[i][j]].push_back(i);
+            }
+        }
+        // bfs
+        unordered_set<int> seen;
+        vector<unordered_set<string>> cluster;
+        for(int i =0;i<accounts.size();i++){
+            if(seen.find(i) != seen.end()) { continue; }
+            queue<int> work;
+            work.push(i);
+            seen.insert(i);
+            cluster.push_back(unordered_set<string>());
+            while(!work.empty()){
+                int count = work.size();
+                while(count> 0){
+                    int cur = work.front();                  
+                    work.pop();                    
+                    auto& emails = accounts[cur];
+                    for(int j=1;j< emails.size();j++){
+                        cluster.back().insert(emails[j]);
+                        // checking relation
+                        auto& ids = relation[emails[j]];
+                        for(auto id: ids){
+                            if(seen.find(id) == seen.end()){
+                                work.push(id);
+                                seen.insert(id);
+                            }
+                        }
+                    }
+                    count--;
+                }
+            }
+        }
+        // build up ans
+        vector<vector<string>> ans;
+        for(auto& emails: cluster){
+            ans.push_back(vector<string>());
+            auto& e = *emails.begin();
+            int first_id = relation[e][0];
+            auto& last =  ans.back();
+            last.push_back(accounts[first_id][0]);
+            last.insert(last.end(), emails.begin(), emails.end());
+            sort(last.begin()+1, last.end());
+        }                                  
+        return ans;
+    }
+};
+#endif
